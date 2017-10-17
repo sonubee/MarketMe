@@ -17,6 +17,7 @@ public class Main {
     	BasicConfigurator.configure();
         get("/hello", (req, res) -> "Hello World");
 
+        //Setting up Firebase
         setupFirebase();
 
 		final FirebaseDatabase database = FirebaseDatabase.getInstance();
