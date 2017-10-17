@@ -16,8 +16,15 @@ public class Main {
     public static void main(String[] args) {
     	BasicConfigurator.configure();
         get("/hello", (req, res) -> "Hello World");
-        
-        FileInputStream serviceAccount = null;
+
+		final FirebaseDatabase database = FirebaseDatabase.getInstance();
+		DatabaseReference ref = database.getReference("server/saving-data/fireblog");
+
+		ref.setValue("test4");
+    }
+
+    public void setupFirebase(){
+		FileInputStream serviceAccount = null;
 		try {
 			serviceAccount = new FileInputStream("./market-me-f5f94-firebase-adminsdk-hl6t3-20f6f09ed8.json");
 		} catch (FileNotFoundException e1) {
@@ -25,24 +32,21 @@ public class Main {
 			e1.printStackTrace();
 		}
 
-        FirebaseOptions options = null;
+		FirebaseOptions options = null;
 		try {
 			options = new FirebaseOptions.Builder()
-			  .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-			  .setDatabaseUrl("https://market-me-f5f94.firebaseio.com")
-			  .build();
+					.setCredentials(GoogleCredentials.fromStream(serviceAccount))
+					.setDatabaseUrl("https://market-me-f5f94.firebaseio.com")
+					.build();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-        FirebaseApp.initializeApp(options);
-        
-        System.out.println("End");
-        
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("server/saving-data/fireblog");
-        
-        ref.setValue("test3");
-    }
+		FirebaseApp.initializeApp(options);
+
+		System.out.println("End");
+
+
+	}
 }
