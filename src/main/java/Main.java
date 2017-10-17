@@ -17,13 +17,15 @@ public class Main {
     	BasicConfigurator.configure();
         get("/hello", (req, res) -> "Hello World");
 
+        setupFirebase();
+
 		final FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference ref = database.getReference("server/saving-data/fireblog");
 
 		ref.setValue("test4");
     }
 
-    public void setupFirebase(){
+    public static void setupFirebase(){
 		FileInputStream serviceAccount = null;
 		try {
 			serviceAccount = new FileInputStream("./market-me-f5f94-firebase-adminsdk-hl6t3-20f6f09ed8.json");
