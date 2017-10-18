@@ -23,8 +23,9 @@ public class Main {
 		get("/addQuestion", (request, response) ->{
 			//System.out.println("UUID: " + request.queryParams("uuid"));
 			//System.out.println("Creating Wallet");
-			DatabaseReference ref = database.getReference("Question/TF");
-			ref.push().setValue("Question");
+			DatabaseReference ref = database.getReference("Question");
+			Question question = new Question("This is the question", "TF", "sonubee");
+			ref.push().setValue(question);
 
 			return true;
 		});
@@ -32,40 +33,46 @@ public class Main {
 		get("/getQuestion", (request, response) ->{
 			//System.out.println("UUID: " + request.queryParams("uuid"));
 			//System.out.println("Creating Wallet");
-			DatabaseReference ref = database.getReference("Question/TF");
+			DatabaseReference ref = database.getReference("Question");
 
-			// Attach a listener to read the data at our posts reference
-			ref.addValueEventListener(new ValueEventListener() {
+
+			ref.addChildEventListener(new ChildEventListener() {
 				@Override
-				public void onDataChange(DataSnapshot dataSnapshot) {
-					System.out.println(dataSnapshot.getValue());
-					//JSONObject temp = dataSnapshot.getValue();
+				public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+					try {
+						System.out.println("Value123456: " + dataSnapshot.getValue());
+						Question question = dataSnapshot.getValue(Question.class);
+						System.out.println("Get Value: " + dataSnapshot.getValue());
+						System.out.println("Question: " + question.getQuestion());
+
+					} catch (Exception e){
+						System.out.println("Error: " + e.getMessage());
+					}
+				}
+
+				@Override
+				public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+				}
+
+				@Override
+				public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+				}
+
+				@Override
+				public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
 				}
 
 				@Override
 				public void onCancelled(DatabaseError databaseError) {
-					System.out.println("The read failed: " + databaseError.getCode());
+
 				}
 			});
 
+
 			return true;
-		});
-
-		DatabaseReference ref = database.getReference("Question/TF");
-		
-		System.out.println("Before Readng");
-
-		// Attach a listener to read the data at our posts reference
-		ref.addValueEventListener(new ValueEventListener() {
-			@Override
-			public void onDataChange(DataSnapshot dataSnapshot) {
-				System.out.println("Value: " + dataSnapshot.getValue());
-			}
-
-			@Override
-			public void onCancelled(DatabaseError databaseError) {
-				System.out.println("The read failed: " + databaseError.getCode());
-			}
 		});
 
     }
